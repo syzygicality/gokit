@@ -5,8 +5,7 @@ import (
 	"fmt"
 )
 
-// Usage prints the command-line usage message.
-func Usage() {
+func MainUsage() {
 	out := flag.CommandLine.Output()
 	fmt.Fprintf(out, "Usage: gokit <command> [flags]\n\n")
 	fmt.Fprintf(out, "Flags:\n")

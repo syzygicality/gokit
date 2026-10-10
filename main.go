@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"os"
 
@@ -8,30 +9,36 @@ import (
 )
 
 func main() {
-	flag.Usage = internal.Usage
+	flag.Usage = internal.MainUsage
 
 	helpCmd := flag.NewFlagSet("help", flag.ExitOnError)
 	listCmd := flag.NewFlagSet("list", flag.ExitOnError)
-	upsertCmd := flag.NewFlagSet("upsert", flag.ExitOnError)
+	saveCmd := flag.NewFlagSet("save", flag.ExitOnError)
 	removeCmd := flag.NewFlagSet("remove", flag.ExitOnError)
 	searchCmd := flag.NewFlagSet("search", flag.ExitOnError)
 
 	flag.Parse()
 
+	var err error = nil
+
 	switch flag.Arg(0) {
 	case helpCmd.Name():
 		flag.Usage()
-		os.Exit(0)
 	case listCmd.Name():
-
-	case upsertCmd.Name():
-
+		err = internal.HandleList(listCmd)
+	case saveCmd.Name():
+		err = internal.HandleSave(saveCmd)
 	case removeCmd.Name():
-
+		err = internal.HandleRemove(removeCmd)
 	case searchCmd.Name():
-		
+		err = internal.HandleSearch(searchCmd)
 	default:
 		flag.Usage()
+		err = errors.New("Invalid command.")
+	}
+
+	if err != nil {
 		os.Exit(2)
 	}
+	os.Exit(0)
 }
