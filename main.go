@@ -33,8 +33,11 @@ func main() {
 	case searchCmd.Name():
 		err = internal.HandleSearch(searchCmd)
 	default:
-		flag.Usage()
-		err = errors.New("Invalid command.")
+		err = internal.InstallPkg(flag.Arg(0))
+		if err != nil {
+			flag.Usage()
+			err = errors.New("Invalid command.")
+		}
 	}
 
 	if err != nil {

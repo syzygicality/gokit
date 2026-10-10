@@ -1,5 +1,5 @@
 package internal
 
-func InstallPkg() error {
+func InstallPkg(alias string) error {
 	return nil
 }
