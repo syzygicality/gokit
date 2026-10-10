@@ -1,0 +1,9 @@
+version: "2"
+sql:
+  - engine: sqlite
+    schema: internal/database/sql/schema.sql
+    queries: internal/database/sql/query.sql
+    gen:
+      go:
+        emit_interface: true
+        out: internal/database/gen
