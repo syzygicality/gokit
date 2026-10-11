@@ -70,7 +70,7 @@ func (q *Queries) ListAliasesByAlias(ctx context.Context) ([]Alias, error) {
 }
 
 const listAliasesByCreation = `-- name: ListAliasesByCreation :many
-SELECT alias, repo_url, updated_at, created_at FROM aliases ORDER BY created_at DESC
+SELECT alias, repo_url, updated_at, created_at FROM aliases ORDER BY created_at DESC, rowid DESC
 `
 
 func (q *Queries) ListAliasesByCreation(ctx context.Context) ([]Alias, error) {
@@ -102,7 +102,7 @@ func (q *Queries) ListAliasesByCreation(ctx context.Context) ([]Alias, error) {
 }
 
 const listAliasesByRecency = `-- name: ListAliasesByRecency :many
-SELECT alias, repo_url, updated_at, created_at FROM aliases ORDER BY updated_at DESC
+SELECT alias, repo_url, updated_at, created_at FROM aliases ORDER BY updated_at DESC, rowid DESC
 `
 
 func (q *Queries) ListAliasesByRecency(ctx context.Context) ([]Alias, error) {
@@ -134,8 +134,8 @@ func (q *Queries) ListAliasesByRecency(ctx context.Context) ([]Alias, error) {
 }
 
 const upsertAlias = `-- name: UpsertAlias :exec
-INSERT INTO aliases (alias, repo_url, updated_at)
-VALUES (?, ?, CURRENT_TIMESTAMP)
+INSERT INTO aliases (alias, repo_url, updated_at, created_at)
+VALUES (?, ?, strftime('%Y-%m-%d %H:%M:%f', 'now'), strftime('%Y-%m-%d %H:%M:%f', 'now'))
 ON CONFLICT(alias)
 DO UPDATE SET 
     repo_url = excluded.repo_url,
@@ -147,6 +147,8 @@ type UpsertAliasParams struct {
 	RepoUrl string
 }
 
+// Timestamps are stored with millisecond precision so saves within the same
+// second still sort correctly.
 func (q *Queries) UpsertAlias(ctx context.Context, arg UpsertAliasParams) error {
 	_, err := q.db.ExecContext(ctx, upsertAlias, arg.Alias, arg.RepoUrl)
 	return err

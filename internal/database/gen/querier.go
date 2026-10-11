@@ -14,6 +14,8 @@ type Querier interface {
 	ListAliasesByAlias(ctx context.Context) ([]Alias, error)
 	ListAliasesByCreation(ctx context.Context) ([]Alias, error)
 	ListAliasesByRecency(ctx context.Context) ([]Alias, error)
+	// Timestamps are stored with millisecond precision so saves within the same
+	// second still sort correctly.
 	UpsertAlias(ctx context.Context, arg UpsertAliasParams) error
 }
 

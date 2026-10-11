@@ -5,8 +5,12 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"gokit/internal/consts"
 	"gokit/internal/database"
 	"gokit/internal/database/gen"
+	"slices"
+	"strings"
+	"unicode"
 )
 
 func HandleSave(saveCmd *flag.FlagSet) error {
@@ -37,7 +41,30 @@ func HandleSave(saveCmd *flag.FlagSet) error {
 	return nil
 }
 
+func validateAlias(alias string) error {
+	switch {
+	case alias == "":
+		return errors.New("Alias must not be empty")
+	case strings.HasPrefix(alias, "-"):
+		return fmt.Errorf("Invalid alias %q, aliases cannot start with -", alias)
+	case strings.ContainsFunc(alias, unicode.IsSpace):
+		return fmt.Errorf("Invalid alias %q, aliases cannot contain whitespace", alias)
+	case len(alias) > consts.AliasMaxLength:
+		return fmt.Errorf("Invalid alias %q, aliases can be at most %d characters", alias, consts.AliasMaxLength)
+	case slices.Contains(consts.Commands, alias):
+		return fmt.Errorf("Invalid alias %q, it is a gokit command", alias)
+	}
+	return nil
+}
+
 func saveAlias(alias string, repoUrl string) error {
+	if err := validateAlias(alias); err != nil {
+		return err
+	}
+	if strings.TrimSpace(repoUrl) == "" {
+		return errors.New("Repo URL must not be empty")
+	}
+
 	err := database.WithDB(func(db *gen.Queries) error {
 		return db.UpsertAlias(context.Background(), gen.UpsertAliasParams{
 			Alias:   alias,

@@ -41,6 +41,7 @@ func InstallPkg(alias string) error {
 func goGet(repoUrl string) error {
 	// go get expects a module path, not a URL
 	pkg := strings.TrimPrefix(strings.TrimPrefix(repoUrl, "https://"), "http://")
+	pkg = strings.TrimSuffix(strings.TrimSuffix(pkg, "/"), ".git")
 
 	fmt.Printf("getting %s...\n", pkg)
 

@@ -48,11 +48,11 @@ func WithDB(callback func(db *gen.Queries) error) error {
 	defer db.Close()
 
 	if err := db.Ping(); err != nil {
-		return fmt.Errorf("Failed to open alias file, please check your file permissions on %s", path)
+		return fmt.Errorf("Failed to open alias file %s, please check your file permissions: %w", path, err)
 	}
 
 	if _, err := db.Exec(schema); err != nil {
-		return fmt.Errorf("Failed to initialize alias database schema")
+		return fmt.Errorf("Failed to initialize alias database %s: %w", path, err)
 	}
 
 	return callback(gen.New(db))

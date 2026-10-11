@@ -7,16 +7,17 @@ import (
 	"os"
 
 	"gokit/internal"
+	"gokit/internal/consts"
 )
 
 func main() {
 	flag.Usage = internal.MainUsage
 
-	helpCmd := flag.NewFlagSet("help", flag.ExitOnError)
-	listCmd := flag.NewFlagSet("list", flag.ExitOnError)
-	saveCmd := flag.NewFlagSet("save", flag.ExitOnError)
-	removeCmd := flag.NewFlagSet("remove", flag.ExitOnError)
-	searchCmd := flag.NewFlagSet("search", flag.ExitOnError)
+	helpCmd := flag.NewFlagSet(consts.HelpCommand, flag.ExitOnError)
+	listCmd := flag.NewFlagSet(consts.ListCommand, flag.ExitOnError)
+	saveCmd := flag.NewFlagSet(consts.SaveCommand, flag.ExitOnError)
+	removeCmd := flag.NewFlagSet(consts.RemoveCommand, flag.ExitOnError)
+	searchCmd := flag.NewFlagSet(consts.SearchCommand, flag.ExitOnError)
 
 	flag.Parse()
 

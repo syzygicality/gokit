@@ -57,6 +57,17 @@ func HandleSearch(searchCmd *flag.FlagSet) error {
 		return errors.New("search requires a query")
 	}
 
+	if alias != "" {
+		if err := validateAlias(alias); err != nil {
+			return err
+		}
+	}
+
+	if limit < 0 {
+		searchCmd.Usage()
+		return fmt.Errorf("Invalid limit %d, expected 0 or more", limit)
+	}
+
 	if top {
 		limit = 1
 	}
