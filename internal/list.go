@@ -15,9 +15,9 @@ func HandleList(listCmd *flag.FlagSet) error {
 	listCmd.Usage = func() { ListUsage(listCmd) }
 
 	var sortBy, direction string
-	listCmd.StringVar(&sortBy, "s", "alias", "shorthand for --sort")
+	listCmd.StringVar(&sortBy, "s", "alias", "shorthand for -sort")
 	listCmd.StringVar(&sortBy, "sort", "alias", "column to sort by: alias, updated, created")
-	listCmd.StringVar(&direction, "d", "desc", "shorthand for --dir")
+	listCmd.StringVar(&direction, "d", "desc", "shorthand for -dir")
 	listCmd.StringVar(&direction, "dir", "desc", "sort direction: asc, desc")
 
 	listCmd.Parse(flag.Args()[1:])

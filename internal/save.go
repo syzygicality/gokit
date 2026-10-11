@@ -14,7 +14,7 @@ func HandleSave(saveCmd *flag.FlagSet) error {
 
 	var get bool
 	saveCmd.BoolVar(&get, "get", false, "install the repo with go get after saving")
-	saveCmd.BoolVar(&get, "g", false, "shorthand for --get")
+	saveCmd.BoolVar(&get, "g", false, "shorthand for -get")
 
 	saveCmd.Parse(flag.Args()[1:])
 
@@ -26,6 +26,18 @@ func HandleSave(saveCmd *flag.FlagSet) error {
 	alias := saveCmd.Arg(0)
 	repoUrl := saveCmd.Arg(1)
 
+	if err := saveAlias(alias, repoUrl); err != nil {
+		return err
+	}
+
+	if get {
+		return goGet(repoUrl)
+	}
+
+	return nil
+}
+
+func saveAlias(alias string, repoUrl string) error {
 	err := database.WithDB(func(db *gen.Queries) error {
 		return db.UpsertAlias(context.Background(), gen.UpsertAliasParams{
 			Alias:   alias,
@@ -38,10 +50,6 @@ func HandleSave(saveCmd *flag.FlagSet) error {
 	}
 
 	fmt.Printf("Saved %s -> %s\n", alias, repoUrl)
-
-	if get {
-		return goGet(repoUrl)
-	}
 
 	return nil
 }
