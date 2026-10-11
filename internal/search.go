@@ -5,7 +5,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"gokit/internal/consts"
+	"github.com/syzygicality/gokit/internal/consts"
 	"net/http"
 	"net/url"
 	"strconv"

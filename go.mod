@@ -1,4 +1,4 @@
-module gokit
+module github.com/syzygicality/gokit
 
 go 1.26.0
 

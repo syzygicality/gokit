@@ -5,8 +5,8 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"gokit/internal/database"
-	"gokit/internal/database/gen"
+	"github.com/syzygicality/gokit/internal/database"
+	"github.com/syzygicality/gokit/internal/database/gen"
 )
 
 func HandleRemove(removeCmd *flag.FlagSet) error {

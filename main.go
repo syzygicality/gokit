@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"os"
 
-	"gokit/internal"
-	"gokit/internal/consts"
+	"github.com/syzygicality/gokit/internal"
+	"github.com/syzygicality/gokit/internal/consts"
 )
 
 func main() {
