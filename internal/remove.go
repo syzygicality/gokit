@@ -10,7 +10,7 @@ import (
 )
 
 func HandleRemove(removeCmd *flag.FlagSet) error {
-	removeCmd.Usage = RemoveUsage
+	removeCmd.Usage = func() { RemoveUsage(removeCmd) }
 
 	removeCmd.Parse(flag.Args()[1:])
 

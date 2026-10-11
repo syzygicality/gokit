@@ -35,10 +35,14 @@ func InstallPkg(alias string) error {
 		return fmt.Errorf("Failed to look up alias %s: %w", alias, err)
 	}
 
+	return goGet(repoUrl)
+}
+
+func goGet(repoUrl string) error {
 	// go get expects a module path, not a URL
 	pkg := strings.TrimPrefix(strings.TrimPrefix(repoUrl, "https://"), "http://")
 
-	fmt.Printf("go get %s\n", pkg)
+	fmt.Printf("getting %s...\n", pkg)
 
 	cmd := exec.Command("go", "get", pkg)
 	cmd.Stdout = os.Stdout

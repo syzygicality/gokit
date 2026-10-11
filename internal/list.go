@@ -14,14 +14,17 @@ import (
 func HandleList(listCmd *flag.FlagSet) error {
 	listCmd.Usage = func() { ListUsage(listCmd) }
 
-	sortBy := listCmd.String("sort", "alias", "column to sort by: alias, updated, created")
-	direction := listCmd.String("dir", "desc", "sort direction: asc, desc")
+	var sortBy, direction string
+	listCmd.StringVar(&sortBy, "s", "alias", "shorthand for --sort")
+	listCmd.StringVar(&sortBy, "sort", "alias", "column to sort by: alias, updated, created")
+	listCmd.StringVar(&direction, "d", "desc", "shorthand for --dir")
+	listCmd.StringVar(&direction, "dir", "desc", "sort direction: asc, desc")
 
 	listCmd.Parse(flag.Args()[1:])
 
-	if *direction != "asc" && *direction != "desc" {
+	if direction != "asc" && direction != "desc" {
 		listCmd.Usage()
-		return fmt.Errorf("Invalid sort direction %q, expected asc or desc", *direction)
+		return fmt.Errorf("Invalid sort direction %q, expected asc or desc", direction)
 	}
 
 	var aliases []gen.Alias
@@ -30,7 +33,7 @@ func HandleList(listCmd *flag.FlagSet) error {
 		var err error
 		ctx := context.Background()
 
-		switch *sortBy {
+		switch sortBy {
 		case "alias":
 			aliases, err = db.ListAliasesByAlias(ctx)
 		case "updated":
@@ -39,7 +42,7 @@ func HandleList(listCmd *flag.FlagSet) error {
 			aliases, err = db.ListAliasesByCreation(ctx)
 		default:
 			listCmd.Usage()
-			return fmt.Errorf("Invalid sort column %q, expected alias, updated or created", *sortBy)
+			return fmt.Errorf("Invalid sort column %q, expected alias, updated or created", sortBy)
 		}
 
 		return err
@@ -54,7 +57,7 @@ func HandleList(listCmd *flag.FlagSet) error {
 		return nil
 	}
 
-	if *direction == "asc" {
+	if direction == "asc" {
 		slices.Reverse(aliases)
 	}
 

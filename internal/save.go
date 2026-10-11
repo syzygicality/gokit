@@ -10,7 +10,11 @@ import (
 )
 
 func HandleSave(saveCmd *flag.FlagSet) error {
-	saveCmd.Usage = SaveUsage
+	saveCmd.Usage = func() { SaveUsage(saveCmd) }
+
+	var get bool
+	saveCmd.BoolVar(&get, "get", false, "install the repo with go get after saving")
+	saveCmd.BoolVar(&get, "g", false, "shorthand for --get")
 
 	saveCmd.Parse(flag.Args()[1:])
 
@@ -34,6 +38,10 @@ func HandleSave(saveCmd *flag.FlagSet) error {
 	}
 
 	fmt.Printf("Saved %s -> %s\n", alias, repoUrl)
+
+	if get {
+		return goGet(repoUrl)
+	}
 
 	return nil
 }
