@@ -12,11 +12,11 @@ func MainUsage() {
 	flag.PrintDefaults()
 }
 
-func ListUsage() {
-	out := flag.CommandLine.Output()
+func ListUsage(listCmd *flag.FlagSet) {
+	out := listCmd.Output()
 	fmt.Fprintf(out, "Usage: gokit list [flags]\n\n")
 	fmt.Fprintf(out, "Flags:\n")
-	flag.PrintDefaults()
+	listCmd.PrintDefaults()
 }
 
 func SaveUsage() {
