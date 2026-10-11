@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"flag"
+	"fmt"
 	"os"
 
 	"gokit/internal"
@@ -32,15 +33,15 @@ func main() {
 		err = internal.HandleRemove(removeCmd)
 	case searchCmd.Name():
 		err = internal.HandleSearch(searchCmd)
+	case "":
+		flag.Usage()
+		err = errors.New("No command or alias given.")
 	default:
 		err = internal.InstallPkg(flag.Arg(0))
-		if err != nil {
-			flag.Usage()
-			err = errors.New("Invalid command.")
-		}
 	}
 
 	if err != nil {
+		fmt.Fprintln(os.Stderr, "Error:", err)
 		os.Exit(2)
 	}
 	os.Exit(0)

@@ -18,6 +18,6 @@ DO UPDATE SET
     repo_url = excluded.repo_url,
     updated_at = excluded.updated_at;
 
--- name: DeleteAlias :exec
+-- name: DeleteAlias :execrows
 DELETE FROM aliases WHERE alias = ?;
 

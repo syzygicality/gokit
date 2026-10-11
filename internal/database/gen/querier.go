@@ -9,7 +9,7 @@ import (
 )
 
 type Querier interface {
-	DeleteAlias(ctx context.Context, alias string) error
+	DeleteAlias(ctx context.Context, alias string) (int64, error)
 	GetAlias(ctx context.Context, alias string) (Alias, error)
 	ListAliasesByAlias(ctx context.Context) ([]Alias, error)
 	ListAliasesByCreation(ctx context.Context) ([]Alias, error)

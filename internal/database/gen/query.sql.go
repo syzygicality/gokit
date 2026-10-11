@@ -9,13 +9,16 @@ import (
 	"context"
 )
 
-const deleteAlias = `-- name: DeleteAlias :exec
+const deleteAlias = `-- name: DeleteAlias :execrows
 DELETE FROM aliases WHERE alias = ?
 `
 
-func (q *Queries) DeleteAlias(ctx context.Context, alias string) error {
-	_, err := q.db.ExecContext(ctx, deleteAlias, alias)
-	return err
+func (q *Queries) DeleteAlias(ctx context.Context, alias string) (int64, error) {
+	result, err := q.db.ExecContext(ctx, deleteAlias, alias)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected()
 }
 
 const getAlias = `-- name: GetAlias :one
